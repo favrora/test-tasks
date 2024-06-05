@@ -35,6 +35,7 @@ class Folder extends React.Component {
           <span>📁 {name}</span>
         </div>
 
+        {/* Render children only if the folder is expanded */}
         {!collapsed && children.map((child, index) => (
           child.type === 'FOLDER' ? (
             <Folder

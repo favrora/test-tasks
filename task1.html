@@ -1,0 +1,35 @@
+<script>
+/* TASK #1:
+  Create a function that parses a string into an integer (like the js function parseInt, but without the
+  base parameter)
+
+  Example:
+  myParseInt(“123”) + 2
+  Should output 125, and not “1232”
+  should be actual string parse, and not +string or anything like that
+*/
+
+function myParseInt(str) {
+  let result = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    // Break if the character is not a digit
+    if (str[i] < '0' || str[i] > '9') continue;
+
+    // Convert character to digit and add to the result number
+    result = result * 10 + (str[i] - '0');
+  }
+
+  return result;
+}
+
+// Some Real Cases
+console.log(myParseInt("price 123$") + 2); // output 125
+console.log(myParseInt("income +1000$") + 10); // output 1010
+
+// Test the function
+console.log(myParseInt("123") + 2); // output 125
+console.log(myParseInt("123abc") + 2); // output 125
+console.log(myParseInt("abc123") + 2); // output 125
+console.log(myParseInt("lka*s123ca'%sdmk") + 2); // output 125
+</script>

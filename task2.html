@@ -1,0 +1,86 @@
+<script>
+/* TASK #2:
+
+  Create a function that prints a given matrix in spiral
+  the function should accept any matrix size [MxN]
+
+  Example with a 3x3 matrix:
+  1 2 3
+  4 5 6
+  7 8 9
+
+  For the above matrix, the output should be:
+  1 2 3 6 9 8 7 4 5
+*/
+
+function spiralMatrix(matrix) {
+  if (matrix.length === 0) return [];
+
+  const result = [];
+  let top = 0;
+  let left = 0;
+  let bottom = matrix.length - 1;
+  let right = matrix[0].length - 1;
+
+  while (top <= bottom && left <= right) {
+    // Move from left to right along the top row
+    for (let i = left; i <= right; i++) {
+      result.push(matrix[top][i]);
+    }
+    top++;
+
+    // Move from top to bottom along the right column
+    for (let i = top; i <= bottom; i++) {
+      result.push(matrix[i][right]);
+    }
+    right--;
+
+    // Move from right to left along the bottom row
+    if (top <= bottom) {
+      for (let i = right; i >= left; i--) {
+        result.push(matrix[bottom][i]);
+      }
+      bottom--;
+    }
+
+    // Move from bottom to top along the left column
+    if (left <= right) {
+      for (let i = bottom; i >= top; i--) {
+        result.push(matrix[i][left]);
+      }
+      left++;
+    }
+  }
+
+  return result;
+}
+
+const matrix1 = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+console.log(spiralMatrix(matrix1)); // output: [1, 2, 3, 6, 9, 8, 7, 4, 5]
+
+
+const matrix2 = [
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9, 10, 11, 12]
+];
+console.log(spiralMatrix(matrix2)); // output: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]
+
+
+const matrix3 = [
+  [1]
+];
+console.log(spiralMatrix(matrix3)); // output: [1]
+
+
+const matrix4 = [
+  [1, 2],
+  [3, 4],
+  [5, 6]
+];
+console.log(spiralMatrix(matrix4)); // output: [1, 2, 4, 6, 5, 3]
+</script>
