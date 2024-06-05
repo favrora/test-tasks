@@ -13,25 +13,14 @@ class Folder extends React.Component {
     this.setState(prevState => ({ collapsed: !prevState.collapsed }));
   };
 
-  filterChildren = (children, searchQuery) => {
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    return children.filter(child => {
-      if (child.type === 'FILE' && child.name.toLowerCase().includes(lowerCaseQuery)) {
-        return true;
-      }
-      if (child.type === 'FOLDER') {
-        const filteredChildren = this.filterChildren(child.children, searchQuery);
-        return filteredChildren.length > 0 || child.name.toLowerCase().includes(lowerCaseQuery);
-      }
-      return false;
-    });
-  };
-
   render() {
     const { name, children, level, path, expandedFolders, searchQuery } = this.props;
     const { collapsed } = this.state;
-    const filteredChildren = this.filterChildren(children, searchQuery);
-    const hasChildren = filteredChildren.length > 0;
+    const hasChildren = children && children.length > 0;
+
+    if (!hasChildren && searchQuery && !name.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return null;
+    }
 
     return (
       <div className="folder">
@@ -46,10 +35,10 @@ class Folder extends React.Component {
           <span>📁 {name}</span>
         </div>
 
-        {!collapsed && filteredChildren.map((child, index) => (
+        {!collapsed && children.map((child, index) => (
           child.type === 'FOLDER' ? (
             <Folder
-              key={index}
+              key={`${child.name}-${searchQuery}-${index}`}
               name={child.name}
               children={child.children}
               level={level + 1}

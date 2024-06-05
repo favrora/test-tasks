@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Folder, Search } from './components';
-import { filterData } from './utils/FilterData';
+import { filterData } from './utils/filterData';
 import data from './data/Data.json';
 import './styles/App.css';
 
@@ -10,12 +10,12 @@ class App extends Component {
     this.state = {
       searchQuery: '',
       filteredData: data,
-      expandedFolders: props.expandedFolders || [],
+      expandedFolders: this.props.expandedFolders,
     };
   }
 
   handleSearchChange = (searchQuery) => {
-    const filteredData = filterData(data, searchQuery);
+    const filteredData = searchQuery ? filterData(data, searchQuery) : data;
     this.setState({ searchQuery, filteredData });
   };
 

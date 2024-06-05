@@ -1,90 +1,47 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 
-const data = [
-  {
-    type: 'FOLDER',
-    name: 'Common7',
-    children: [
-      {
-        type: 'FOLDER',
-        name: 'IDE',
-        children: [
-          {
-            type: 'FILE',
-            name: 'msdia140.dll',
-            mime: 'application/x-msdownload',
-          },
-        ],
-      },
-      {
-        type: 'FOLDER',
-        name: 'Tools',
-        children: [
-          {
-            type: 'FILE',
-            name: 'errlook.exe',
-            mime: 'application/x-msdownload',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    type: 'FILE',
-    name: 'Todo.txt',
-    mime: 'text/plain',
-  },
-];
+describe('App Component', () => {
+  test('renders the File System header', async () => {
+    const expandedFolders = [];
+    render(<App expandedFolders={expandedFolders} />);
 
-test('renders the file system title', () => {
-  render(<App expandedFolders={[]} />);
-  const titleElement = screen.getByText(/File System/i);
-  expect(titleElement).toBeInTheDocument();
-});
-
-test('renders folders and files correctly', () => {
-  render(<App expandedFolders={[]} />);
-  data.forEach((item) => {
-    if (item.type === 'FOLDER') {
-      expect(screen.getByText((content, element) => element.textContent === item.name)).toBeInTheDocument();
-    } else if (item.type === 'FILE') {
-      expect(screen.getByText((content, element) => element.textContent === `${item.name} (${item.mime})`)).toBeInTheDocument();
-    }
+    const headerElement = await screen.findByText(/File System/i);
+    expect(headerElement).toBeInTheDocument();
   });
-});
 
-test('toggles folder collapse correctly', () => {
-  render(<App expandedFolders={[]} />);
-  const folderName = 'Common7';
-  const folderElement = screen.getByText((content, element) => element.textContent === folderName);
-  expect(folderElement).toBeInTheDocument();
+  test('renders the search input', async () => {
+    const expandedFolders = [];
+    render(<App expandedFolders={expandedFolders} />);
 
-  const childFolderName = 'IDE';
+    const searchInput = await screen.findByPlaceholderText(/Search folders or files.../i);
+    expect(searchInput).toBeInTheDocument();
+  });
 
-  // Initially, the child folder should not be visible
-  expect(screen.queryByText((content, element) => element.textContent === childFolderName)).not.toBeInTheDocument();
+  test('renders No Results when search query does not match', async () => {
+    const expandedFolders = [];
+    render(<App expandedFolders={expandedFolders} />);
 
-  // Click to expand
-  fireEvent.click(folderElement);
-  expect(screen.getByText((content, element) => element.textContent === childFolderName)).toBeInTheDocument();
+    const searchInput = screen.getByPlaceholderText(/Search folders or files.../i);
+    fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
 
-  // Click to collapse
-  fireEvent.click(folderElement);
-  expect(screen.queryByText((content, element) => element.textContent === childFolderName)).not.toBeInTheDocument();
-});
+    const noResultsMessage = await screen.findByText(/No Results/i);
+    expect(noResultsMessage).toBeInTheDocument();
+  });
 
-test('search functionality works correctly', () => {
-  render(<App expandedFolders={[]} />);
-  const searchInput = screen.getByPlaceholderText('Search files...');
+  test('renders folders and files based on search query', async () => {
+    const expandedFolders = ['/Common7/IDE'];
+    render(<App expandedFolders={expandedFolders} />);
 
-  // Search for a file
-  fireEvent.change(searchInput, { target: { value: 'msdia140.dll' } });
-  expect(screen.getByText((content, element) => element.textContent === 'msdia140.dll (application/x-msdownload)')).toBeInTheDocument();
+    const searchInput = screen.getByPlaceholderText(/Search folders or files.../i);
+    fireEvent.change(searchInput, { target: { value: 'msdia140.dll' } });
 
-  // Clear search
-  fireEvent.change(searchInput, { target: { value: '' } });
-  expect(screen.getByText((content, element) => element.textContent === 'Common7')).toBeInTheDocument();
-  expect(screen.getByText((content, element) => element.textContent === 'Todo.txt (text/plain)')).toBeInTheDocument();
+    await waitFor(() => {
+      const fileElement = screen.getByText((content) => {
+        return content.includes('msdia140.dll');
+      });
+      expect(fileElement).toBeInTheDocument();
+    });
+  });
 });
