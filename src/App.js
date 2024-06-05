@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Folder, File, Search } from './components';
 import data from './data/Data.json';
 import './styles/App.css';
 
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {

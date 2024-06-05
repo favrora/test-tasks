@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
+import useFilteredData from '../hooks/useFilteredData';
 
 class Search extends Component {
   constructor(props) {
@@ -17,23 +18,8 @@ class Search extends Component {
   };
 
   filterData = (searchQuery) => {
-    const filteredData = this.filterItems(this.props.data, searchQuery);
+    const filteredData = useFilteredData(this.props.data, searchQuery);
     this.props.onSearch(searchQuery, filteredData);
-  };
-
-  filterItems = (items, searchQuery) => {
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    return items.reduce((result, item) => {
-      if (item.type === 'FOLDER') {
-        const filteredChildren = this.filterItems(item.children, searchQuery);
-        if (filteredChildren.length > 0 || item.name.toLowerCase().includes(lowerCaseQuery)) {
-          result.push({ ...item, children: filteredChildren });
-        }
-      } else if (item.type === 'FILE' && item.name.toLowerCase().includes(lowerCaseQuery)) {
-        result.push(item);
-      }
-      return result;
-    }, []);
   };
 
   render() {
