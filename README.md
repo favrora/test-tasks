@@ -19,7 +19,7 @@ Optimization:
    ```sh
    git clone https://github.com/favrora/test-tasks.git
    ```
-2. Install NPM packages
+2. Open project folder
    ```sh
    cd task3
    ```
