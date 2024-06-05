@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
-import useFilteredData from '../hooks/useFilteredData';
 
 class Search extends Component {
   constructor(props) {
@@ -18,8 +17,8 @@ class Search extends Component {
   };
 
   filterData = (searchQuery) => {
-    const filteredData = useFilteredData(this.props.data, searchQuery);
-    this.props.onSearch(searchQuery, filteredData);
+    const { onSearch } = this.props;
+    onSearch(searchQuery);
   };
 
   render() {

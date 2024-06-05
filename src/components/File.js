@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import '../styles/App.css';
 
-class File extends React.Component {
+class File extends Component {
   render() {
     const { name, mimeType, level } = this.props;
 
