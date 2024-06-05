@@ -35,9 +35,12 @@ class Folder extends React.Component {
         <div
           className="name"
           onClick={hasChildren ? this.toggleCollapse : undefined}
-          style={{ cursor: hasChildren ? 'pointer' : 'default', marginLeft: `${level * 20}px` }}
+          style={{ marginLeft: `${level * 20}px` }}
         >
-          {hasChildren && (collapsed ? '▶' : '▼')} 📁 {name}
+          <span style={{ visibility: hasChildren ? 'visible' : 'hidden' }}>
+            {collapsed ? '▶' : '▼'}
+          </span>
+          <span>📁 {name}</span>
         </div>
 
         {!collapsed && filteredChildren.map((child, index) => {

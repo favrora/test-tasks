@@ -33,6 +33,11 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
+.folder .name {
+  display: flex;
+  align-items: center;
+}
+
 .folder .arrow {
   margin-right: 5px;
 }
@@ -56,4 +61,3 @@ input[type="text"] {
 .file .name:active {
   background-color: #b6b6b6;
 }
-
