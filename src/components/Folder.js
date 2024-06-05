@@ -28,14 +28,16 @@ class Folder extends React.Component {
       return false;
     });
 
+    const hasChildren = filteredChildren.length > 0;
+
     return (
       <div className="folder">
         <div
           className="name"
-          onClick={this.toggleCollapse}
-          style={{ cursor: 'pointer', marginLeft: `${level * 20}px` }}
+          onClick={hasChildren ? this.toggleCollapse : undefined}
+          style={{ cursor: hasChildren ? 'pointer' : 'default', marginLeft: `${level * 20}px` }}
         >
-          {collapsed ? '▶' : '▼'} 📁 {name}
+          {hasChildren && (collapsed ? '▶' : '▼')} 📁 {name}
         </div>
 
         {!collapsed && filteredChildren.map((child, index) => {

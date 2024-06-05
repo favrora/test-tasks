@@ -1,33 +1,39 @@
-import React from 'react';
+import React, { Component } from 'react';
+import debounce from 'lodash.debounce';
 
-class Search extends React.Component {
+class Search extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputValue: props.searchQuery,
+    };
+    this.debouncedFilter = debounce(this.filterData, 400);
+  }
+
   handleChange = (event) => {
-    const searchQuery = event.target.value;
-    const filteredData = this.filterData(this.props.data, searchQuery);
+    const inputValue = event.target.value;
+    this.setState({ inputValue });
+    this.debouncedFilter(inputValue);
+  };
+
+  filterData = (searchQuery) => {
+    const filteredData = this.filterItems(this.props.data, searchQuery);
     this.props.onSearch(searchQuery, filteredData);
   };
 
-  filterData = (data, searchQuery) => {
+  filterItems = (items, searchQuery) => {
     const lowerCaseQuery = searchQuery.toLowerCase();
-
-    const filterItems = (items) => {
-      let result = [];
-
-      for (let item of items) {
-        if (item.type === 'FOLDER') {
-          const filteredChildren = filterItems(item.children);
-          if (filteredChildren.length > 0 || item.name.toLowerCase().includes(lowerCaseQuery)) {
-            result.push({ ...item, children: filteredChildren });
-          }
-        } else if (item.type === 'FILE' && item.name.toLowerCase().includes(lowerCaseQuery)) {
-          result.push(item);
+    return items.reduce((result, item) => {
+      if (item.type === 'FOLDER') {
+        const filteredChildren = this.filterItems(item.children, searchQuery);
+        if (filteredChildren.length > 0 || item.name.toLowerCase().includes(lowerCaseQuery)) {
+          result.push({ ...item, children: filteredChildren });
         }
+      } else if (item.type === 'FILE' && item.name.toLowerCase().includes(lowerCaseQuery)) {
+        result.push(item);
       }
-
       return result;
-    };
-
-    return filterItems(data);
+    }, []);
   };
 
   render() {
@@ -35,7 +41,7 @@ class Search extends React.Component {
       <input
         type="text"
         placeholder="Search folders or files..."
-        value={this.props.searchQuery}
+        value={this.state.inputValue}
         onChange={this.handleChange}
       />
     );

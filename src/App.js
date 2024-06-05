@@ -30,24 +30,28 @@ class App extends React.Component {
           data={data}
         />
 
-        {filteredData.map((item, index) => {
-          if (item.type === 'FOLDER') {
-            return (
-              <Folder
-                key={index}
-                name={item.name}
-                children={item.children}
-                level={0}
-                path={`/${item.name}`}
-                expandedFolders={expandedFolders}
-                searchQuery={searchQuery}
-              />
-            );
-          } else if (item.type === 'FILE') {
-            return <File key={index} name={item.name} mimeType={item.mime} level={0} />;
-          }
-          return null;
-        })}
+        {filteredData.length === 0 ? (
+          <p>No Results</p>
+        ) : (
+          filteredData.map((item, index) => {
+            if (item.type === 'FOLDER') {
+              return (
+                <Folder
+                  key={index}
+                  name={item.name}
+                  children={item.children}
+                  level={0}
+                  path={`/${item.name}`}
+                  expandedFolders={expandedFolders}
+                  searchQuery={searchQuery}
+                />
+              );
+            } else if (item.type === 'FILE') {
+              return <File key={index} name={item.name} mimeType={item.mime} level={0} />;
+            }
+            return null;
+          })
+        )}
       </div>
     );
   }
