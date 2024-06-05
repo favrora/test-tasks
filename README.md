@@ -2,10 +2,10 @@
 
 Optimization:
 
-- search debounce with 400ms when entering text into the search bar or changing a filter, cancels the call if you quickly enter another letter into the search bar
-- memoize function for caching search results
-- Jest tests with expandedFolders parameter to check the structure
-- Everything is splited into small components
+- search debounce with 400ms when entering text into the search bar, cancels the call if you quickly enter another letter
+- memoize function for caching search results for a specific query
+- Jest tests with expandedFolders parameter to test the structure
+- Everything is splited into small class components
 
 ## Preview
 
