@@ -1,0 +1,31 @@
+h1 {
+  text-align: center;
+  color: #343a40;
+}
+
+.folder, .file {
+  margin-left: 20px;
+}
+
+.folder .name, .file .name {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.folder .name:hover, .file .name:hover {
+  background-color: #e9ecef;
+}
+
+.folder .name::before {
+  content: '📁';
+  margin-right: 8px;
+}
+
+.file .name::before {
+  content: '📄';
+  margin-right: 8px;
+}
