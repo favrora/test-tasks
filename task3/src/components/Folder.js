@@ -27,9 +27,12 @@ class Folder extends React.Component {
         <div
           className="name"
           onClick={hasChildren ? this.toggleCollapse : undefined}
-          style={{ marginLeft: `${level * 20}px`, cursor: hasChildren ? 'pointer' : 'default', display: 'flex', alignItems: 'center' }}
+          onKeyDown={hasChildren ? (e) => { if (e.key === 'Enter' || e.key === ' ') { this.toggleCollapse(); } } : undefined}
+          role={hasChildren ? 'button' : undefined}
+          tabIndex={hasChildren ? 0 : undefined}
+          style={{ marginLeft: `${level * 20}px`, cursor: hasChildren ? 'pointer' : 'default' }}
         >
-          <span style={{ visibility: hasChildren ? 'visible' : 'hidden', width: '1em' }}>
+          <span style={{ visibility: hasChildren ? 'visible' : 'hidden' }}>
             {collapsed ? '▶' : '▼'}
           </span>
           <span>📁 {name}</span>
