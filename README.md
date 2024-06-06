@@ -5,6 +5,7 @@ Optimization:
 - search debounce with 400ms when entering text into the search bar, cancels the call if you quickly enter another letter
 - memoize function for caching search results for a specific query
 - Jest tests with expandedFolders parameter to test the structure
+- ESLint is configured to maintain code quality and consistency
 - Everything is splited into small class components
 
 ## Preview
